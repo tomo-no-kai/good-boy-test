@@ -1,0 +1,415 @@
+/* ゲーム中に開くメニュー（/menu ページと、各ゲーム画面の Esc で使う） */
+
+.overlay {
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+  overflow: hidden;
+  color: #eee8e9;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+}
+
+/* ゲームの上に重ねるときは、後ろを暗くする */
+.overlay.dimmed {
+  background: rgba(15, 13, 17, 0.8);
+}
+
+/* 左下の赤い光 */
+.redLight {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
+  width: 35%;
+  height: 40%;
+  background: linear-gradient(
+    to right,
+    rgba(200, 80, 80, 0.75),
+    rgba(150, 50, 55, 0.25) 70%,
+    transparent
+  );
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+
+/* 犬 */
+.leftPanel {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+  width: 43%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dog {
+  position: absolute;
+  left: 4%;
+  bottom: 12%;
+  height: 78%;
+  width: auto;
+  max-width: 95%;
+  object-fit: contain;
+  object-position: left bottom;
+}
+
+/* 右側のメニュー */
+.rightPanel {
+  position: absolute;
+  z-index: 3;
+  top: 2.8%;
+  right: 4%;
+  width: 52.5%;
+}
+
+/* タブ */
+.menuTabs {
+  display: flex;
+  align-items: stretch;
+  height: clamp(50px, 10cqh, 75px);
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  padding: 0 5px;
+  color: #eee8e9;
+  background: transparent;
+  font-family: inherit;
+  font-size: clamp(16px, 1.6cqw, 24px);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.tab:hover {
+  background: rgba(142, 41, 46, 0.3);
+}
+
+/* デザインがまだのタブ：押しても反応しない */
+.tab.notReady {
+  cursor: default;
+}
+
+.tab.notReady:hover {
+  background: transparent;
+}
+
+.tab.active {
+  background: linear-gradient(
+    to bottom,
+    rgba(132, 40, 45, 0.15) 0%,
+    rgba(132, 40, 45, 0.85) 100%
+  );
+}
+
+/* メニューの枠 */
+.menuFrame {
+  width: 100%;
+  height: 50cqh;
+  border: 3px solid #922d32;
+  padding: 4% 4% 4% 7%;
+  background: rgba(35, 30, 38, 0.94);
+}
+
+/* もちもの */
+.inventoryLayout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  gap: 6%;
+  height: 100%;
+}
+
+/* アイテム一覧 */
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.itemSlot {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  padding: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #605d61;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.itemSlot:hover {
+  background: #777176;
+}
+
+.itemSlot.selected {
+  background: #87282d;
+}
+
+.itemSlot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 選択中アイテムの詳細（赤い四角＋ぼんやり光る） */
+.itemDetail {
+  min-width: 0;
+  height: 82%;
+  display: flex;
+  flex-direction: column;
+  padding: 6% 6% 7%;
+  background: #772a2e;
+  box-shadow:
+    0 0 25px 10px rgba(119, 42, 46, 0.9),
+    0 0 60px 20px rgba(150, 40, 45, 0.35);
+}
+
+.itemImageArea {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detailImage {
+  max-width: 75%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.itemDetail h2 {
+  margin: 6px 0 8px;
+  font-size: clamp(18px, 1.8cqw, 28px);
+  font-weight: normal;
+}
+
+.detailLine {
+  width: 100%;
+  height: 1px;
+  background: rgba(238, 232, 233, 0.7);
+}
+
+.detailBottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.detailBottom p {
+  margin: 8px 0 0;
+  white-space: pre-line;
+  font-size: clamp(10px, 0.85cqw, 14px);
+  line-height: 1.5;
+}
+
+.useButton {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border: 1px solid #c9bfc1;
+  background: transparent;
+  color: #eee8e9;
+  font-family: inherit;
+  font-size: clamp(10px, 0.85cqw, 13px);
+  cursor: pointer;
+}
+
+.useButton:hover {
+  background: #8e292e;
+}
+
+/* マップ */
+.mapLayout {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  height: 100%;
+}
+
+.floorButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.floorButtons button {
+  padding: 15px 20px;
+  border: 1px solid #aaa;
+  color: #eee;
+  background: #514b52;
+  cursor: pointer;
+}
+
+.floorButtons button.floorSelected {
+  background: #87282d;
+}
+
+.mapPlaceholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #394149;
+  color: #c4c4c4;
+  font-family: sans-serif;
+  letter-spacing: 2px;
+}
+
+.mapPlaceholder small {
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+/* メニューを閉じる案内 */
+.closeGuide {
+  position: absolute;
+  z-index: 4;
+  bottom: 2.5%;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(12px, 1.2cqw, 17px);
+  text-shadow: 0 2px 5px #000;
+}
+
+/* 操作方法（全画面） */
+.controlsScreen {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.controlsFrame {
+  position: relative;
+  width: 94%;
+  height: 89%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #a9a9a9;
+  padding: 0 8%;
+}
+
+.controlsTitle {
+  margin: 5.5cqh 0 2.5cqh;
+  font-size: clamp(26px, 3cqw, 44px);
+  font-weight: normal;
+  letter-spacing: 0.05em;
+}
+
+.controlsLine {
+  width: 100%;
+  height: 1px;
+  background: #a9a9a9;
+}
+
+.controlsGrid {
+  width: 100%;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  row-gap: clamp(80px, 24cqh, 190px);
+  margin-top: 6cqh;
+}
+
+.controlRow {
+  display: flex;
+  align-items: center;
+}
+
+/* キーの四角を並べる場所（A と D の幅に合わせて固定） */
+.keyArea {
+  width: clamp(180px, 18.5cqw, 262px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.keyArea:has(> :only-child) {
+  justify-content: center;
+}
+
+.keyBox {
+  width: clamp(54px, 5.6cqw, 80px);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #a9a9a9;
+  font-size: clamp(24px, 2.8cqw, 40px);
+}
+
+.controlLabel {
+  flex: 1;
+  text-align: center;
+  font-size: clamp(18px, 2.2cqw, 32px);
+  white-space: nowrap;
+}
+
+.controlsClose {
+  margin-bottom: 6cqh;
+  padding: 10px 16px;
+  border: 1px solid #a9a9a9;
+  background: transparent;
+  color: #eee8e9;
+  font-family: inherit;
+  font-size: clamp(16px, 1.7cqw, 24px);
+  cursor: pointer;
+}
+
+.controlsClose:hover {
+  background: #8e292e;
+}
+
+/* 画面が狭い場合 */
+@container (max-width: 900px) {
+  .menuFrame {
+    padding: 4%;
+  }
+
+  .itemGrid {
+    gap: 7px;
+  }
+}
+
+@container (max-width: 600px) {
+  .rightPanel {
+    top: 2%;
+    right: 2%;
+    width: 68%;
+  }
+
+  .tab {
+    font-size: 12px;
+  }
+
+  .menuFrame {
+    height: auto;
+  }
+
+  .inventoryLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .itemDetail {
+    display: none;
+  }
+
+  .closeGuide {
+    font-size: 12px;
+  }
+}

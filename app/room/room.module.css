@@ -1,0 +1,775 @@
+/* 部屋のゲーム画面（元: good day/good-boy） */
+.page {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+    --wall-color: #282725;
+    --floor-color: #40342d;
+    --text-color: #e6ded2;
+    --accent-color: #bd9b75;
+
+    padding: 28px 16px;
+    background: #111110;
+    color: var(--text-color);
+    font-family: "Courier New", monospace;
+}
+
+.gameContainer {
+    width: min(100%, 1000px);
+    margin: 0 auto;
+}
+
+.gameHeader {
+    margin-bottom: 18px;
+}
+
+.gameHeader h1 {
+    margin: 0;
+    font-size: 32px;
+    letter-spacing: 8px;
+    font-weight: 400;
+}
+
+.gameHeader p {
+    margin: 8px 0 0;
+    color: #928b82;
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.gameScreen {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    overflow: hidden;
+    background: #191918;
+    border: 1px solid #51483e;
+    isolation: isolate;
+}
+
+.gameWorld {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4000px;
+    height: 100%;
+    overflow: hidden;
+    background: #252422;
+    will-change: transform;
+}
+
+.roomLight {
+    position: absolute;
+    top: -120px;
+    left: 0;
+    width: 4000px;
+    height: 430px;
+    background:
+        radial-gradient(ellipse at 400px 150px,
+            rgba(174, 151, 113, 0.15), transparent 300px),
+        radial-gradient(ellipse at 1500px 150px,
+            rgba(174, 151, 113, 0.11), transparent 320px),
+        radial-gradient(ellipse at 2700px 140px,
+            rgba(174, 151, 113, 0.13), transparent 320px);
+    animation: light-flicker 7s infinite;
+}
+
+.wall {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 330px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 198px,
+            rgba(0, 0, 0, 0.13) 199px,
+            rgba(0, 0, 0, 0.13) 201px
+        ),
+        linear-gradient(#302e2b, #242321);
+}
+
+.wall::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 20px;
+    background: #191817;
+    border-top: 3px solid #514238;
+}
+
+.floor {
+    position: absolute;
+    top: 330px;
+    left: 0;
+    width: 100%;
+    height: 110px;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 52px,
+            rgba(0, 0, 0, 0.2) 53px,
+            rgba(0, 0, 0, 0.2) 55px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 198px,
+            rgba(0, 0, 0, 0.16) 199px,
+            rgba(0, 0, 0, 0.16) 201px
+        ),
+        linear-gradient(#483b32, #302721);
+}
+
+.wallDecoration {
+    position: absolute;
+    top: 75px;
+}
+
+.picture {
+    width: 74px;
+    height: 94px;
+    padding: 7px;
+    border: 5px solid #554333;
+    background: #171614;
+    box-shadow: 0 4px 12px #0005;
+}
+
+.pictureOne {
+    left: 260px;
+}
+
+.pictureTwo {
+    left: 1510px;
+    width: 90px;
+    height: 110px;
+}
+
+.pictureInner {
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse at 50% 30%, #4d4a40 0 10%, transparent 11%),
+        linear-gradient(145deg, #252520, #111110);
+}
+
+.clock {
+    left: 2210px;
+    top: 65px;
+    width: 64px;
+    height: 64px;
+    border: 5px solid #4c4135;
+    border-radius: 50%;
+    background: #181715;
+}
+
+.clock::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: 27px;
+    width: 3px;
+    height: 20px;
+    background: #a28b69;
+    transform-origin: bottom;
+    transform: rotate(25deg);
+}
+
+.clockHand {
+    position: absolute;
+    top: 16px;
+    left: 27px;
+    width: 3px;
+    height: 14px;
+    background: #a28b69;
+}
+
+.window {
+    position: absolute;
+    top: 70px;
+    width: 105px;
+    height: 150px;
+    border: 8px solid #504237;
+    background: #151b22;
+    box-shadow: 0 0 25px #8a9ca21c;
+}
+
+.windowOne {
+    left: 1030px;
+}
+
+.windowTwo {
+    left: 3250px;
+}
+
+.windowGlass {
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(90deg,
+            transparent 47%, #504237 48% 53%, transparent 54%),
+        linear-gradient(0deg,
+            transparent 47%, #504237 48% 53%, transparent 54%),
+        linear-gradient(#202932, #101419);
+}
+
+/* 家具の基本 */
+.furniture {
+    position: absolute;
+    bottom: 110px;
+    z-index: 3;
+}
+
+.cabinet {
+    width: 88px;
+    height: 150px;
+    background: #594433;
+    border: 5px solid #35281e;
+    box-shadow: inset 0 0 0 2px #72543b, 0 7px 12px #0005;
+}
+
+.cabinetTop {
+    position: absolute;
+    top: -9px;
+    left: -8px;
+    width: 92px;
+    height: 12px;
+    background: #75563b;
+}
+
+.cabinetDoor {
+    position: absolute;
+    top: 12px;
+    left: 9px;
+    width: 52px;
+    height: 115px;
+    border: 3px solid #3d2d21;
+    background: #4a3828;
+}
+
+.cabinetKnob {
+    position: absolute;
+    top: 66px;
+    left: 53px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #b39764;
+}
+
+.table {
+    width: 130px;
+    height: 90px;
+}
+
+.tableTop {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 130px;
+    height: 17px;
+    background: #76563a;
+    border: 3px solid #3a2a20;
+}
+
+.tableLeg {
+    position: absolute;
+    top: 30px;
+    width: 12px;
+    height: 60px;
+    background: #4b3626;
+}
+
+.legLeft {
+    left: 12px;
+}
+
+.legRight {
+    right: 12px;
+}
+
+.sofa {
+    width: 170px;
+    height: 115px;
+}
+
+.sofaBack {
+    position: absolute;
+    top: 0;
+    left: 12px;
+    width: 146px;
+    height: 75px;
+    border: 4px solid #352723;
+    border-radius: 12px 12px 3px 3px;
+    background: #51403b;
+}
+
+.sofaSeat {
+    position: absolute;
+    top: 52px;
+    left: 5px;
+    width: 160px;
+    height: 33px;
+    border: 4px solid #352723;
+    background: #655049;
+}
+
+.sofaArm {
+    position: absolute;
+    top: 40px;
+    width: 25px;
+    height: 48px;
+    background: #59433b;
+    border: 4px solid #352723;
+    border-radius: 5px;
+}
+
+.armLeft {
+    left: 0;
+}
+
+.armRight {
+    right: 0;
+}
+
+.sofaLeg {
+    position: absolute;
+    top: 85px;
+    width: 9px;
+    height: 22px;
+    background: #30231d;
+}
+
+.sofaLegLeft {
+    left: 22px;
+}
+
+.sofaLegRight {
+    right: 22px;
+}
+
+/* ドア */
+.door,
+.exitDoor {
+    position: absolute;
+    bottom: 110px;
+    z-index: 2;
+    width: 92px;
+    height: 210px;
+    border: 7px solid #30251d;
+    background: linear-gradient(90deg, #493629, #594332, #443125);
+    box-shadow: inset 0 0 0 3px #6b503a;
+}
+
+.door::before,
+.exitDoor::before {
+    content: "";
+    position: absolute;
+    top: 16px;
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    border: 3px solid #30231a;
+}
+
+.doorKnob {
+    position: absolute;
+    top: 110px;
+    right: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c1a36a;
+    box-shadow: 0 0 6px #c1a36a44;
+}
+
+.lockedDoor {
+    filter: brightness(0.7);
+}
+
+.exitDoor {
+    border-color: #171512;
+    background: #28221d;
+}
+
+.strangeObject {
+    position: absolute;
+    bottom: 115px;
+    z-index: 4;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 30px;
+    border: 2px solid #93836d;
+    border-radius: 50%;
+    background: #39342e;
+    color: #e5d2b5;
+    font-size: 18px;
+}
+
+/* 犬本体 */
+.dog {
+    position: absolute;
+    z-index: 10;
+    left: 100px;
+    top: 270px;
+    width: 74px;
+    height: 65px;
+    transform-origin: center bottom;
+    will-change: left;
+}
+
+.dogShadow {
+    position: absolute;
+    left: 7px;
+    bottom: -3px;
+    width: 62px;
+    height: 11px;
+    border-radius: 50%;
+    background: #0008;
+    filter: blur(3px);
+}
+
+.dogBody {
+    position: absolute;
+    left: 8px;
+    top: 16px;
+    width: 49px;
+    height: 29px;
+    border-radius: 45% 45% 35% 35%;
+    background: #b98b59;
+    border-bottom: 5px solid #87613e;
+}
+
+.dogBackSpot {
+    position: absolute;
+    left: 12px;
+    top: 4px;
+    width: 22px;
+    height: 15px;
+    border-radius: 50%;
+    background: #72513a;
+}
+
+.dogTail {
+    position: absolute;
+    top: 1px;
+    left: -10px;
+    width: 18px;
+    height: 8px;
+    border-radius: 10px;
+    background: #b98b59;
+    transform: rotate(-30deg);
+    transform-origin: right center;
+}
+
+.dogNeck {
+    position: absolute;
+    top: 7px;
+    right: 0;
+    width: 16px;
+    height: 22px;
+    border-radius: 40%;
+    background: #c89b68;
+}
+
+.dogHead {
+    position: absolute;
+    top: -12px;
+    right: -11px;
+    width: 31px;
+    height: 29px;
+    border-radius: 45% 50% 45% 40%;
+    background: #c89b68;
+}
+
+.dogEar {
+    position: absolute;
+    top: -3px;
+    width: 10px;
+    height: 17px;
+    border-radius: 70% 20% 60% 40%;
+    background: #64452f;
+}
+
+.earLeft {
+    left: 1px;
+    transform: rotate(-22deg);
+}
+
+.earRight {
+    right: 2px;
+    transform: rotate(18deg);
+}
+
+.dogEye {
+    position: absolute;
+    top: 9px;
+    right: 5px;
+    width: 4px;
+    height: 5px;
+    border-radius: 50%;
+    background: #17130f;
+}
+
+.dogMuzzle {
+    position: absolute;
+    top: 15px;
+    right: -3px;
+    width: 15px;
+    height: 10px;
+    border-radius: 45%;
+    background: #e0c6a0;
+}
+
+.dogNose {
+    position: absolute;
+    top: 17px;
+    right: -4px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #211a16;
+}
+
+.dogLeg {
+    position: absolute;
+    top: 21px;
+    width: 10px;
+    height: 18px;
+    border-radius: 4px;
+    background: #a7794d;
+    transform-origin: center top;
+}
+
+.legBack {
+    left: 7px;
+}
+
+.legFront {
+    right: 4px;
+}
+
+.dogPaw {
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    width: 13px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d4ae7f;
+}
+
+/* 移動方向を左向きにする */
+.dog.facingLeft .dogBody {
+    transform: scaleX(-1);
+}
+
+.dog.facingLeft .dogTail {
+    transform: scaleX(-1) rotate(-30deg);
+}
+
+.dog.walking .dogLeg.legBack {
+    animation: walk-back 0.22s infinite alternate ease-in-out;
+}
+
+.dog.walking .dogLeg.legFront {
+    animation: walk-front 0.22s infinite alternate ease-in-out;
+}
+
+.dog.walking .dogBody {
+    animation: body-bob 0.22s infinite alternate ease-in-out;
+}
+
+.dog.walking .dogTail {
+    animation: tail-wag 0.25s infinite alternate ease-in-out;
+}
+
+.dog:not(.walking) .dogTail {
+    animation: tail-idle 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes walk-back {
+    from { transform: rotate(-28deg); }
+    to { transform: rotate(28deg); }
+}
+
+@keyframes walk-front {
+    from { transform: rotate(28deg); }
+    to { transform: rotate(-28deg); }
+}
+
+@keyframes body-bob {
+    from { translate: 0 0; }
+    to { translate: 0 -3px; }
+}
+
+@keyframes tail-wag {
+    from { rotate: -15deg; }
+    to { rotate: 18deg; }
+}
+
+@keyframes tail-idle {
+    from { rotate: -5deg; }
+    to { rotate: 8deg; }
+}
+
+@keyframes light-flicker {
+    0%, 90%, 100% { opacity: 1; }
+    92% { opacity: 0.65; }
+    94% { opacity: 0.95; }
+    96% { opacity: 0.7; }
+}
+
+/* 画面上のUI */
+.hud {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: #d8c9b5;
+    font-size: 11px;
+    letter-spacing: 2px;
+    pointer-events: none;
+    text-shadow: 0 2px 5px #000;
+}
+
+.locationLabel {
+    text-align: right;
+}
+
+.messageBox {
+    position: absolute;
+    z-index: 30;
+    left: 50%;
+    bottom: 22px;
+    width: min(90%, 480px);
+    padding: 13px 18px;
+    border: 1px solid #89766077;
+    background: #131210e8;
+    text-align: center;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.messageBox.visible {
+    opacity: 1;
+}
+
+.messageBox p {
+    margin: 0 0 8px;
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.messageBox span {
+    color: #a99a87;
+    font-size: 10px;
+}
+
+.screenVignette,
+.screenNoise {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    pointer-events: none;
+}
+
+.screenVignette {
+    background: radial-gradient(
+        ellipse at center,
+        transparent 35%,
+        rgba(0, 0, 0, 0.28) 100%
+    );
+}
+
+.screenNoise {
+    opacity: 0.12;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 3px,
+        #ffffff0c 4px
+    );
+}
+
+/* 操作説明 */
+.gameControls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 14px;
+    color: #aaa197;
+    font-size: 12px;
+}
+
+.controlItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.key {
+    display: inline-grid;
+    place-items: center;
+    min-width: 25px;
+    height: 25px;
+    padding: 0 5px;
+    border: 1px solid #62574a;
+    border-bottom-width: 3px;
+    border-radius: 3px;
+    color: #eee2d1;
+    background: #282522;
+}
+
+@container (max-width: 600px) {
+    .page {
+        padding: 18px 10px;
+    }
+
+    .gameScreen {
+        height: 360px;
+    }
+
+    .gameHeader h1 {
+        font-size: 25px;
+    }
+
+    .dog {
+        top: 190px;
+    }
+
+    .wall {
+        height: 250px;
+    }
+
+    .floor {
+        top: 250px;
+        height: 110px;
+    }
+
+    .furniture,
+    .door,
+    .exitDoor {
+        bottom: 110px;
+    }
+
+    .gameControls {
+        gap: 12px;
+        font-size: 11px;
+    }
+
+    .hud {
+        font-size: 9px;
+    }
+}
