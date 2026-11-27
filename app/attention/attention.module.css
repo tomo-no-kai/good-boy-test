@@ -1,0 +1,29 @@
+/* 注意書き画面（元: good day/attention） */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: black;
+}
+
+.attentionImage {
+  transform: translate(80%, 140%);
+}
+
+.nextButton {
+  color: #fcfcfc;
+  text-decoration: none;
+  font-size: 30px;
+}
+
+.explanation {
+  color: #fcfcfc;
+  text-align: center;
+  font-size: 30px;
+  transform: translate(0, 120%);
+  font-family: "Hina Mincho", serif;
+  font-weight: 400;
+  font-style: normal;
+  opacity: 0.8;
+}

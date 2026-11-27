@@ -1,0 +1,164 @@
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #1b1a1f;
+  color: #eee8e9;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+}
+
+/* 背景（public/images/choice/background.png） */
+.background {
+  position: absolute;
+  inset: 0;
+  background: url("/images/choice/background.png") center / cover no-repeat;
+}
+
+/* 選択肢が出ている間の暗さ */
+.dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 8, 12, 0.35);
+}
+
+/* 上の帯 */
+.topBar {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2.3%;
+  min-height: 16px;
+  display: flex;
+  justify-content: center;
+  background: #887c7f;
+}
+
+.topArrow {
+  width: 80px;
+  height: 14px;
+  margin-top: 4px;
+  fill: none;
+  stroke: #eee8e9;
+  stroke-width: 1.5;
+}
+
+/* 選択肢のウィンドウ */
+.dialog {
+  position: absolute;
+  z-index: 3;
+  top: 10%;
+  left: 14.5%;
+  width: 71%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #d9d2d4;
+  padding: 8cqh 0 3cqh;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(170deg, #3a363d 0%, #4a4249 40%, #6f5d63 85%, #7a666b 100%);
+}
+
+.question {
+  margin: 0 0 3.5cqh;
+  font-size: clamp(28px, 2.8cqw, 54px);
+  font-weight: normal;
+  letter-spacing: 0.12em;
+}
+
+.choiceList {
+  width: 66%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4cqh;
+}
+
+.choiceButton {
+  flex: 1;
+  max-height: 116px;
+  border: 2px solid #eee8e9;
+  background: #7c5f66;
+  color: #eee8e9;
+  font-family: inherit;
+  font-size: clamp(22px, 2.1cqw, 40px);
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.choiceButton:hover,
+.choiceButton:focus-visible {
+  background: #93303a;
+  outline: none;
+}
+
+.closeButton {
+  margin-top: 3%;
+  padding: 0.6em 2.4em;
+  border: 2px solid #eee8e9;
+  border-radius: 999px;
+  background: transparent;
+  color: #eee8e9;
+  font-family: inherit;
+  font-size: clamp(14px, 1.2cqw, 22px);
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background: rgba(147, 48, 58, 0.6);
+}
+
+/* 左下のメニューボタン */
+.menuButton {
+  position: absolute;
+  z-index: 4;
+  left: 1.7%;
+  bottom: 2.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #eee8e9;
+  font-size: clamp(12px, 0.85cqw, 16px);
+  text-decoration: none;
+}
+
+.gear {
+  width: clamp(44px, 3.4cqw, 66px);
+  height: auto;
+  fill: #eee8e9;
+}
+
+.gearHole {
+  fill: #1b1a1f;
+}
+
+.gearLines {
+  fill: none;
+  stroke: #eee8e9;
+  stroke-width: 3.5;
+}
+
+.menuButton:hover .gear {
+  fill: #c9727b;
+}
+
+/* 右下の操作説明 */
+.guide {
+  position: absolute;
+  z-index: 4;
+  right: 1.6%;
+  bottom: 2.5%;
+  margin: 0;
+  display: flex;
+  gap: 1.6em;
+  font-size: clamp(13px, 1.25cqw, 24px);
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px #000;
+}
